@@ -24,12 +24,16 @@ from pathlib import Path
 from .cmake_python_gen import generate_pkg
 from ..managers.package_manager import AssetType,get_asset_package_name
 from .template_gen import populate_template
-WORKSPACE_PATH = Path(os.environ["RAS_WORKSPACE_PATH"])
+from ras_common.package.utils import get_cmake_python_pkg_source_dir
+
+pkg_path = get_cmake_python_pkg_source_dir("ras_common")
+
 
 
 def handle_command(asset_type, asset_name, path=None, metapackage=False):
     if not isinstance(path,str):
-        path = WORKSPACE_PATH/'src'/'assets'/asset_type
+        path = Path(pkg_path)/".."/"assets"/asset_type
+        path = path.resolve()
 
     populate_template(asset_name,AssetType[asset_type.upper()],path,metapackage)
 
